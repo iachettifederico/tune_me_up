@@ -5,13 +5,14 @@
 #### Código de ejemplo:
 
 ./robot.rb
-#```ruby
+
+```ruby
 class Robot
 
   # .
   # .
   # .
-
+  
   tune_me_up style: :speaker,
     actions: [:say, :shout],
     create_methods: true,
@@ -22,27 +23,28 @@ class Robot
     callback: :make_me_a_speaker,
     public_callback: false,
     styler: :inject_style
-
+    
   # .
   # .
   # .
-
+  
   def number
     rand 1..5
   end
+  
   # .
   # .
   # .
-
 
 end
-#```
+```
 
 ./reverse_speaker.rb
 
-#```ruby
+```ruby
 module ReverseSpeaker
-  action :say do |frase|
+
+action :say do |frase|
     puts frase.reverse
   end
 
@@ -53,13 +55,14 @@ module ReverseSpeaker
   def self.select_me(receiver) # Only if selector: :select_me
     return true if receiver.number == 1
   end
+
 end
-#```
+```
 
 
-#```ruby
+```ruby
 r = Robot.new
-#```
+```
 
 #### Descripción de lo que debería hacer
 
@@ -67,46 +70,46 @@ En un momento determinado (cuando se le indique) la instancia r de la clase Robo
 
 Deberá sobreescribir los métodos "say" y "shout" de la instancia a la que se aplica el tunning con los bloques que se definen en el módulo correspondiente (*Speaker) en las llamadas a:
 
-#```ruby
+```ruby
 action :say 
 action :say
-#```
+```
 
 Definidas en el módulo correspondiente.
 
 Si agregamos 
 
-#```ruby
+```ruby
 create_methods: true
-#```
+```
 
 deberá implementar en la instancia, los métodos "say" y "shout" que reciban "*args" y devuelvan nil (o algo). Si se pone _false_ no deberá hacerlo. La opciṕn por default es _true_ (*VER*)
 
 Si tenemos:
 
-#```ruby
+```ruby
 selector: :select_me
-#```
+```
 
 los módulos *Speaker deberán tener un método 
 
-#```ruby
+```ruby
 self.select_me(receiver)
-#```
+```
 
 que devuelva _true_ o _false_ dependiendo de si el _receiver_ cumple con las condiciones para recibir ese estilo. 
 
 En cambio, si tenemos:
 
-#```ruby
+```ruby
 selector: lambda { |receiver| return true if receiver.something == "something_else"  }
-#```
+```
 
 éste se utilizará para determinar el estilo, dependiendo de si devuelve _true_ o _false_.
 
 ####Un ejemplo de uso:
 
-#```ruby
+```ruby
 class Robot
   tune_me_up #...
     selector: lambda { |receiver| return true if receiver.style == self.class  }
@@ -115,7 +118,7 @@ class Robot
     ReverseSpeaker
   end
 end
-#```
+```
 
 Éste código deberá insertar el estilo ReverseSpeaker en las clases donde el método _style_ devuelva _ReverseSpeaker_.
 
@@ -127,9 +130,9 @@ La inyección del estilo se llevará a cabo cuando se llame al método "make_me_
 
 Para hacerlo público deberá pasarse el parámetro 
 
-#```ruby
+```ruby
 public_callback: true
-#```
+```
 
 a la llamada a _tune_me_up_ en la clase Robot.
 
@@ -141,7 +144,8 @@ Otra opción es implementar alguna función que llame al styler en algún caso e
 #### Código de ejemplo:
 
 ./robot.rb
-#```ruby
+
+```ruby
 class Robot < ActiveRecord::Base
   after_find :make_me_a_speaker
   # .
@@ -157,11 +161,11 @@ class Robot < ActiveRecord::Base
   # .
 
 end
-#```
+```
 
 ./reverse_speaker.rb
 
-#```ruby
+```ruby
 module ReverseSpeaker
   action :say do |frase|
     puts frase.reverse
@@ -175,12 +179,12 @@ module ReverseSpeaker
     return true if receiver.number == 1
   end
 end
-#```
+```
 
 
-#```ruby
+```ruby
 r = Robot.first
-#```
+```
 
 #### Descripción de lo que debería hacer
 
